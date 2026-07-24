@@ -16,7 +16,6 @@ public class DraftController {
 
     @PostMapping
     public ResponseEntity<?> createNote(@RequestBody @Valid CreateNoteDtoRecord createNoteDtoRecord) {
-
         return null;
     }
 }
