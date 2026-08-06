@@ -2,17 +2,20 @@ package com.daily_notes.notes.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.cassandra.core.mapping.Column;
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.Table;
 
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Setter
 @Table("note")
 public class NoteEntity {
 
+    @Id
     @PrimaryKey
     private String id;
 

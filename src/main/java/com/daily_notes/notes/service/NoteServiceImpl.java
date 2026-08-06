@@ -6,6 +6,7 @@ import com.daily_notes.notes.dto.UpdateNoteDto;
 import com.daily_notes.notes.entity.NoteEntity;
 import com.daily_notes.notes.mapper.CustomMapper;
 import com.daily_notes.notes.records.ApiResponse;
+import com.daily_notes.notes.records.CreateNoteDtoRecord;
 import com.daily_notes.notes.utility.constant.NoteConstant;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import com.daily_notes.notes.exceptions.exception.NoteNotFoundException;
 
@@ -29,8 +31,9 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public ApiResponse createNote(CreateNoteDto createNoteDto) {
+    public ApiResponse createNote(CreateNoteDtoRecord createNoteDto) {
         NoteEntity noteEntity = CustomMapper.mapToEntity(createNoteDto, NoteEntity.class);
+
         noteEntity = noteDaoService.createNote(noteEntity);
         return new ApiResponse("Success", noteEntity, true, new ArrayList<>());
     }
@@ -66,7 +69,8 @@ public class NoteServiceImpl implements NoteService {
 
         Pageable pageable = PageRequest.of(offset,
                 limit, Sort.by(Sort.Direction.DESC, "createdDate"));
-        noteDaoService.getAllNotes(userId, pageable);
+        noteDaoService.
+                getAllNotes(userId, pageable);
         return new ApiResponse(SUCCESS, noteDaoService.getAllNotes(userId, pageable),
                 true, new ArrayList<>());
     }

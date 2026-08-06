@@ -1,10 +1,13 @@
 package com.daily_notes.notes.controller.note.v1;
 
 import com.daily_notes.notes.dto.CreateNoteDto;
+import com.daily_notes.notes.records.CreateNoteDtoRecord;
 import com.daily_notes.notes.service.NoteService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RequestMapping("api/v1/note")
 @RestController
@@ -17,7 +20,7 @@ public class NoteController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createNote(@RequestBody CreateNoteDto createNoteDto) {
+    public ResponseEntity<?> createNote(@RequestBody CreateNoteDtoRecord createNoteDto) {
         return new ResponseEntity<>(noteService.createNote(createNoteDto), HttpStatus.CREATED);
     }
 
