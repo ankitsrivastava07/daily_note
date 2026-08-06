@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CreateNoteServiceImpl implements NoteService {
+public class DraftServiceImpl implements DraftService {
 
     @Autowired
     private NoteDaoService noteDaoService;

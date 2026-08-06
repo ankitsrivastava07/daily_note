@@ -1,7 +1,8 @@
-package com.daily_notes.notes.controller;
+package com.daily_notes.notes.controller.draft.v1;
 
 import com.daily_notes.notes.records.CreateNoteDtoRecord;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +16,7 @@ public class DraftController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createNote(@RequestBody @Valid CreateNoteDtoRecord createNoteDtoRecord) {
-        return null;
+    public ResponseEntity<?> createDraft(@RequestBody @Valid CreateNoteDtoRecord createNoteDtoRecord) {
+        return new ResponseEntity<>(createNoteDtoRecord, HttpStatus.CREATED);
     }
 }

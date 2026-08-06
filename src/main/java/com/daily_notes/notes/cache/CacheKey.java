@@ -1,10 +1,7 @@
 package com.daily_notes.notes.cache;
 
-import org.springframework.stereotype.Component;
-
 import java.util.Objects;
 
-@Component
 final public class CacheKey<K, V> {
 
     private final K key;
