@@ -3,8 +3,10 @@ package com.daily_notes.notes.entity;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
 import org.springframework.data.cassandra.core.mapping.Column;
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
+import org.springframework.data.cassandra.core.mapping.PrimaryKeyColumn;
 import org.springframework.data.cassandra.core.mapping.Table;
 
 import java.util.List;
@@ -15,14 +17,19 @@ import java.util.UUID;
 @Table("note")
 public class NoteEntity {
 
-    @Id
-    @PrimaryKey
-    private String id;
+    @PrimaryKeyColumn(
+            name = "_id",
+            type = PrimaryKeyType.CLUSTERED
+    )
+    private String _id;
 
     @Column("attachment_ids")
     private List<String> attachments;
-
-    @Column(value = "user_id")
+    // @PrimaryKey
+    @PrimaryKeyColumn(
+            name = "user_id",
+            type = PrimaryKeyType.PARTITIONED
+    )
     private String userId;
 
     @Column("title")
@@ -31,6 +38,7 @@ public class NoteEntity {
     private String content;
 
     @Column("created_at")
+    // @PrimaryKey
     private String createdAt;
     @Column("updated_at")
     private String updatedAt;

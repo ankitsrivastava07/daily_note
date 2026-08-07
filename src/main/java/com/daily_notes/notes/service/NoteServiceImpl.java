@@ -52,7 +52,7 @@ public class NoteServiceImpl implements NoteService {
                 new NoteNotFoundException(NOTE_NOT_FOUND + updateNoteDto.id()));
 
         noteDaoService.updateNote(note);
-        NoteEntity noteEntity = noteDaoService.getNoteById(note.getId())
+        NoteEntity noteEntity = noteDaoService.getNoteById(note.get_id())
                 .orElseThrow(() ->
                         new NoteNotFoundException(NOTE_NOT_FOUND));
         return new ApiResponse(SUCCESS, noteEntity, true, new ArrayList<>());
@@ -68,9 +68,7 @@ public class NoteServiceImpl implements NoteService {
     public ApiResponse getAllNotes(String userId, Integer offset, Integer limit) {
 
         Pageable pageable = PageRequest.of(offset,
-                limit, Sort.by(Sort.Direction.DESC, "createdDate"));
-        noteDaoService.
-                getAllNotes(userId, pageable);
+                limit, Sort.by(Sort.Direction.ASC, "created_at"));
         return new ApiResponse(SUCCESS, noteDaoService.getAllNotes(userId, pageable),
                 true, new ArrayList<>());
     }

@@ -30,8 +30,8 @@ public class NoteController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getAllNotes(@RequestParam(defaultValue = "0") Integer offset,
-                                         @RequestParam(defaultValue = "10") Integer limit, @RequestHeader String userId) {
+    public ResponseEntity<?> getAllNotes(@RequestParam(defaultValue = "0", required = false) Integer offset,
+                                         @RequestParam(defaultValue = "10", required = false) Integer limit, @RequestHeader String userId) {
         return new ResponseEntity<>(noteService.getAllNotes(userId, offset, limit), HttpStatus.OK);
     }
 }

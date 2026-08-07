@@ -12,7 +12,7 @@ import java.util.UUID;
 public class NoteEntityCallback implements BeforeConvertCallback<NoteEntity> {
     @Override
     public @NonNull NoteEntity onBeforeConvert(NoteEntity entity, CqlIdentifier tableName) {
-        entity.setId(UUID.randomUUID().toString());
+        entity.set_id(UUID.randomUUID().toString());
         return entity;
     }
 }
