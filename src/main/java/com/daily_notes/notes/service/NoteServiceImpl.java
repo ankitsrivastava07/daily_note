@@ -1,13 +1,11 @@
 package com.daily_notes.notes.service;
 
 import com.daily_notes.notes.dao.NoteDaoService;
-import com.daily_notes.notes.dto.CreateNoteDto;
 import com.daily_notes.notes.dto.UpdateNoteDto;
 import com.daily_notes.notes.entity.NoteEntity;
 import com.daily_notes.notes.mapper.CustomMapper;
 import com.daily_notes.notes.records.ApiResponse;
 import com.daily_notes.notes.records.CreateNoteDtoRecord;
-import com.daily_notes.notes.utility.constant.NoteConstant;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -22,6 +20,7 @@ import static com.daily_notes.notes.utility.constant.NoteConstant.NOTE_NOT_FOUND
 import static com.daily_notes.notes.utility.constant.NoteConstant.SUCCESS;
 
 @Service
+
 public class NoteServiceImpl implements NoteService {
 
     private final NoteDaoService noteDaoService;
@@ -31,9 +30,9 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public ApiResponse createNote(CreateNoteDtoRecord createNoteDto) {
+    public ApiResponse createNote(String userId, CreateNoteDtoRecord createNoteDto) {
         NoteEntity noteEntity = CustomMapper.mapToEntity(createNoteDto, NoteEntity.class);
-
+        noteEntity.setUserId(userId);
         noteEntity = noteDaoService.createNote(noteEntity);
         return new ApiResponse("Success", noteEntity, true, new ArrayList<>());
     }
@@ -52,7 +51,7 @@ public class NoteServiceImpl implements NoteService {
                 new NoteNotFoundException(NOTE_NOT_FOUND + updateNoteDto.id()));
 
         noteDaoService.updateNote(note);
-        NoteEntity noteEntity = noteDaoService.getNoteById(note.get_id())
+        NoteEntity noteEntity = noteDaoService.getNoteById(note.getId())
                 .orElseThrow(() ->
                         new NoteNotFoundException(NOTE_NOT_FOUND));
         return new ApiResponse(SUCCESS, noteEntity, true, new ArrayList<>());
@@ -68,7 +67,7 @@ public class NoteServiceImpl implements NoteService {
     public ApiResponse getAllNotes(String userId, Integer offset, Integer limit) {
 
         Pageable pageable = PageRequest.of(offset,
-                limit, Sort.by(Sort.Direction.ASC, "created_at"));
+                limit, Sort.by(Sort.Direction.DESC, "created_at"));
         return new ApiResponse(SUCCESS, noteDaoService.getAllNotes(userId, pageable),
                 true, new ArrayList<>());
     }

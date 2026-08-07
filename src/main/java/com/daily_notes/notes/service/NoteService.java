@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public interface NoteService {
 
-    ApiResponse createNote(CreateNoteDtoRecord createNoteDto);
+    ApiResponse createNote(String userId, CreateNoteDtoRecord createNoteDto);
 
     ApiResponse deleteNoteById(String id, String userId);
 

@@ -20,8 +20,8 @@ public class NoteController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createNote(@RequestBody CreateNoteDtoRecord createNoteDto) {
-        return new ResponseEntity<>(noteService.createNote(createNoteDto), HttpStatus.CREATED);
+    public ResponseEntity<?> createNote(@RequestHeader String userId, @RequestBody CreateNoteDtoRecord createNoteDto) {
+        return new ResponseEntity<>(noteService.createNote(userId, createNoteDto), HttpStatus.CREATED);
     }
 
     @GetMapping("/{noteId}")
