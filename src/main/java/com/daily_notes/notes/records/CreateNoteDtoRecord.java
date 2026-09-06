@@ -1,10 +1,26 @@
 package com.daily_notes.notes.records;
 
-import com.daily_notes.notes.dto.FileAttachmentDto;
+import java.util.List;
 
 public record CreateNoteDtoRecord(String title,
-                                  String name,
+                                  String priority,
+                                  String statusId,
+                                  String projectIdBandId,
+                                  String visibilityId,
+                                  String assigneeOwnerId,
+                                  String location,
+                                  String version,
+                                  String createdAt,
+                                  String dueDateTime,
+                                  String estTime,
+                                  String remainderAlterId,
+                                  String repeatNoteAutomaticallyId,
+                                  String categoryId,
+                                  String keyTakeAwaysHighLights,
                                   String description,
+                                  List<String> checkList,
+                                  List<String> tags,
+                                  String referenceURL,
                                   String userId,
-                                  FileAttachmentDto fileAttachmentDto) {
+                                  String subCategoryId) {
 }

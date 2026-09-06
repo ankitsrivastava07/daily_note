@@ -1,16 +1,14 @@
 package com.daily_notes.notes.controller.note.v1;
 
-import com.daily_notes.notes.dto.CreateNoteDto;
 import com.daily_notes.notes.records.CreateNoteDtoRecord;
 import com.daily_notes.notes.service.NoteService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.UUID;
-
-@RequestMapping("api/v1/note")
 @RestController
+@RequestMapping("/api/v1/daily-note")
+@CrossOrigin("http://localhost:5173")
 public class NoteController {
 
     private final NoteService noteService;
@@ -20,13 +18,13 @@ public class NoteController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createNote(@RequestHeader String userId, @RequestBody CreateNoteDtoRecord createNoteDto) {
-        return new ResponseEntity<>(noteService.createNote(userId, createNoteDto), HttpStatus.CREATED);
+    public ResponseEntity<?> createNote(@RequestBody CreateNoteDtoRecord createNoteDto) {
+        return new ResponseEntity<>(noteService.createNote(createNoteDto), HttpStatus.CREATED);
     }
 
     @GetMapping("/{noteId}")
-    public ResponseEntity<?> getNoteById(@PathVariable String noteId) {
-        return new ResponseEntity<>(noteService.getNoteById(noteId), HttpStatus.OK);
+    public ResponseEntity<?> getNoteById(@PathVariable String noteId, @RequestHeader String userId) {
+        return new ResponseEntity<>(noteService.getNoteById(noteId, userId), HttpStatus.OK);
     }
 
     @GetMapping

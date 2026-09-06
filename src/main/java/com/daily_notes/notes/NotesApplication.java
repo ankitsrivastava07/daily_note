@@ -9,4 +9,3 @@ public class NotesApplication {
         SpringApplication.run(NotesApplication.class, args);
     }
 }
-

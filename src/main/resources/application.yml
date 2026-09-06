@@ -1,0 +1,16 @@
+resilience4j:
+  # Strategy 1: Semaphore Bulkhead
+  bulkhead:
+    instances:
+      paymentServiceSemaphore:
+        maxConcurrentCalls: 10          # Maximum simultaneous calls allowed
+        maxWaitDuration: 200ms          # Time a thread will wait for a slot before failing
+
+  # Strategy 2: Thread Pool Bulkhead
+  threadpoolbulkhead:
+    instances:
+      paymentServiceThreadPool:
+        maxThreadPoolSize: 8            # Maximum threads in the pool
+        coreThreadPoolSize: 4           # Keep-alive base threads
+        queueCapacity: 20               # Tasks waiting in line before rejection
+        keepAliveDuration: 1000ms       # Thread idle lifetime

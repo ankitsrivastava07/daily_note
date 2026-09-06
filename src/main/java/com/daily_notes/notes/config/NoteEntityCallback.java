@@ -1,3 +1,4 @@
+/*
 package com.daily_notes.notes.config;
 
 import com.daily_notes.notes.entity.NoteEntity;
@@ -18,3 +19,4 @@ public class NoteEntityCallback implements BeforeConvertCallback<NoteEntity> {
         return entity;
     }
 }
+*/

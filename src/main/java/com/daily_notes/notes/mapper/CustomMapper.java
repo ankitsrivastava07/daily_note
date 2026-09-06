@@ -1,6 +1,5 @@
 package com.daily_notes.notes.mapper;
 
-import com.daily_notes.notes.records.ApiResponse;
 import tools.jackson.databind.ObjectMapper;
 
 public class CustomMapper {

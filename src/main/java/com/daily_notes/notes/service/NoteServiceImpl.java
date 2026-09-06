@@ -6,21 +6,20 @@ import com.daily_notes.notes.entity.NoteEntity;
 import com.daily_notes.notes.mapper.CustomMapper;
 import com.daily_notes.notes.records.ApiResponse;
 import com.daily_notes.notes.records.CreateNoteDtoRecord;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.UUID;
+import java.util.Arrays;
+import java.util.NoSuchElementException;
 
-import com.daily_notes.notes.exceptions.exception.NoteNotFoundException;
-
-import static com.daily_notes.notes.utility.constant.NoteConstant.NOTE_NOT_FOUND;
 import static com.daily_notes.notes.utility.constant.NoteConstant.SUCCESS;
 
 @Service
-
 public class NoteServiceImpl implements NoteService {
 
     private final NoteDaoService noteDaoService;
@@ -30,37 +29,37 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public ApiResponse createNote(String userId, CreateNoteDtoRecord createNoteDto) {
+    public ApiResponse createNote(CreateNoteDtoRecord createNoteDto) {
         NoteEntity noteEntity = CustomMapper.mapToEntity(createNoteDto, NoteEntity.class);
-        noteEntity.setUserId(userId);
         noteEntity = noteDaoService.createNote(noteEntity);
-        return new ApiResponse("Success", noteEntity, true, new ArrayList<>());
+        return new ApiResponse(SUCCESS, true, noteEntity, new ArrayList<>());
     }
 
     @Override
-    public ApiResponse getNoteById(String noteId) {
-        NoteEntity note = noteDaoService.getNoteById(noteId).orElseThrow(() ->
-                new NoteNotFoundException(NOTE_NOT_FOUND + noteId));
-
-        return new ApiResponse("Success", note, true, new ArrayList<>());
+    @Cacheable(value = "notes", key = "#noteId")
+    public ApiResponse getNoteById(String noteId, String userId) {
+        NoteEntity note = noteDaoService.getNoteById(noteId, userId);
+        return new ApiResponse(SUCCESS, true, note, new ArrayList<>());
     }
 
     @Override
     public ApiResponse updateNote(UpdateNoteDto updateNoteDto) {
-        NoteEntity note = noteDaoService.getNoteById(updateNoteDto.id()).orElseThrow(() ->
-                new NoteNotFoundException(NOTE_NOT_FOUND + updateNoteDto.id()));
+        NoteEntity note = noteDaoService.getNoteById(updateNoteDto.id(),
+                updateNoteDto.userId());
 
-        noteDaoService.updateNote(note);
-        NoteEntity noteEntity = noteDaoService.getNoteById(note.getId())
-                .orElseThrow(() ->
-                        new NoteNotFoundException(NOTE_NOT_FOUND));
-        return new ApiResponse(SUCCESS, noteEntity, true, new ArrayList<>());
+        if (note == null)
+            throw new NoSuchElementException("Note not found with id: " +
+                    updateNoteDto.id() + " and userId: " + updateNoteDto.userId());
+
+        note = noteDaoService.updateNote(note);
+        return new ApiResponse(SUCCESS, true, Arrays.asList(note), new ArrayList<>());
     }
 
     @Override
+    @CacheEvict
     public ApiResponse deleteNoteById(String id, String userId) {
         noteDaoService.deleteNote(id, userId);
-        return new ApiResponse(SUCCESS, noteDaoService.getNoteById(id), true, new ArrayList<>());
+        return new ApiResponse(SUCCESS, true, noteDaoService.getNoteById(id, userId), new ArrayList<>());
     }
 
     @Override
@@ -68,7 +67,7 @@ public class NoteServiceImpl implements NoteService {
 
         Pageable pageable = PageRequest.of(offset,
                 limit, Sort.by(Sort.Direction.DESC, "created_at"));
-        return new ApiResponse(SUCCESS, noteDaoService.getAllNotes(userId, pageable),
-                true, new ArrayList<>());
+        return new ApiResponse(SUCCESS, true, noteDaoService.getAllNotes(userId, pageable),
+                new ArrayList<>());
     }
 }

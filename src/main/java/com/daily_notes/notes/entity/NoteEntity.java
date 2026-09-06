@@ -2,67 +2,57 @@ package com.daily_notes.notes.entity;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
-import org.springframework.data.cassandra.core.mapping.Column;
-import org.springframework.data.cassandra.core.mapping.PrimaryKeyColumn;
-import org.springframework.data.cassandra.core.mapping.Table;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSortKey;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Setter
-@Table("note")
+@DynamoDbBean
 public class NoteEntity {
 
-    @PrimaryKeyColumn(
-            name = "user_id",
-            ordinal = 0,
-            type = PrimaryKeyType.PARTITIONED
-    )
     private String userId;
+    private String noteKey;
 
-
-    @PrimaryKeyColumn(
-            name = "created_at",
-            ordinal = 1,
-            type = PrimaryKeyType.CLUSTERED
-    )
     private Instant createdAt;
-
-
-    @PrimaryKeyColumn(
-            name = "_id",
-            ordinal = 2,
-            type = PrimaryKeyType.CLUSTERED
-    )
     private String id;
-
-
-    @Column("title")
     private String title;
-
-
-    @Column("content")
     private String content;
-
-
-    @Column("attachment_ids")
-    private List<String> attachments;
-
-
-    @Column("updated_at")
+    private List<String> attachments = new ArrayList<>();
     private Instant updatedAt;
-
-
-    @Column("created_by")
     private String createdBy;
-
-
-    @Column("updated_by")
     private String updatedBy;
+    private List<String> todoIds = new ArrayList<>();
+    private String priority;
+    private String statusId;
+    private String projectIdBandId;
+    private String visibilityId;
+    private String assigneeOwnerId;
+    private String location;
+    private String version;
+    private String dueDateTime;
+    private String estTime;
+    private String remainderAlterId;
+    private String repeatNoteAutomaticallyId;
+    private String categoryId;
+    private String keyTakeAwaysHighLights;
+    private String description;
+    private List<String> checkList = new ArrayList<>();
+    private List<String> tags = new ArrayList<>();
+    private String referenceURL;
+    private String subCategoryId;
 
+    @DynamoDbPartitionKey
+    public String getUserId() {
+        return userId;
+    }
 
-    @Column("todo_ids")
-    private List<String> todoIds;
+    @DynamoDbSortKey
+    public String getNoteKey() {
+        return noteKey;
+    }
 }

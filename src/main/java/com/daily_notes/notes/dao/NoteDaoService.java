@@ -13,9 +13,9 @@ public interface NoteDaoService {
 
     void deleteNote(String noteId, String userId);
 
-    void updateNote(NoteEntity noteEntity);
+    NoteEntity updateNote(NoteEntity noteEntity);
 
     List<NoteEntity> getAllNotes(String userId, Pageable pageable);
 
-    Optional<NoteEntity> getNoteById(String noteId);
+    NoteEntity getNoteById(String noteId, String userId);
 }
