@@ -30,7 +30,6 @@ public class ShortNoteDaoImpl implements ShortNoteDao {
 
     @Override
     public Page<ShortNoteEntity> getAllShortNotes(
-            String categoryId,
             String userId,
             int limit,
             Map<String, AttributeValue> lastEvaluatedKey) {
@@ -41,20 +40,15 @@ public class ShortNoteDaoImpl implements ShortNoteDao {
         );
 
         QueryEnhancedRequest.Builder builder = QueryEnhancedRequest.builder()
-                .queryConditional(condition)
-                .scanIndexForward(false)
+                .queryConditional(
+                        QueryConditional.keyEqualTo(
+                                Key.builder()
+                                        .partitionValue(userId)
+                                        .build()
+                        )
+                )
+                .scanIndexForward(false) // newest createdAt first
                 .limit(limit);
-
-        // 2. Filter by categoryId if provided
-        if (categoryId != null && !categoryId.trim().isEmpty()) {
-            builder.filterExpression(
-                    Expression.builder()
-                            .expression("#catId = :catVal")
-                            .putExpressionName("#catId", "categoryId")
-                            .putExpressionValue(":catVal", AttributeValue.builder().s(categoryId).build())
-                            .build()
-            );
-        }
 
         if (lastEvaluatedKey != null && !lastEvaluatedKey.isEmpty()) {
             builder.exclusiveStartKey(lastEvaluatedKey);

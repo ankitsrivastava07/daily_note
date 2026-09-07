@@ -4,12 +4,13 @@ import lombok.Getter;
 import lombok.Setter;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.*;
 
+import java.time.Instant;
+
 @Getter
 @Setter
 @DynamoDbBean
 public class ShortNoteEntity extends BaseEntity {
 
-    private String id;
     private String userId;
     private String name;
     private String content;
@@ -18,17 +19,26 @@ public class ShortNoteEntity extends BaseEntity {
 
     @DynamoDbPartitionKey
     @DynamoDbAttribute("user_id")
-    @DynamoDbSecondaryPartitionKey(indexNames = "CategoryIndex") // GSI Partition Key
+    @DynamoDbSecondaryPartitionKey(indexNames = "LatestNotesIndex")
     public String getUserId() {
         return userId;
     }
-    @DynamoDbAttribute("id")
+
+    @Override
     @DynamoDbSortKey
+    @DynamoDbAttribute("id")
     public String getId() {
-        return id;
+        return super.getId();
     }
 
-    @DynamoDbSecondarySortKey(indexNames = "CategoryIndex") // GSI Sort Key
+    @Override
+    @DynamoDbSecondarySortKey(indexNames = "LatestNotesIndex")
+    @DynamoDbAttribute("createdAt")
+    public Instant getCreatedAt() {
+        return super.getCreatedAt();
+    }
+
+    @DynamoDbAttribute("categoryId")
     public String getCategoryId() {
         return categoryId;
     }

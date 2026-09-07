@@ -23,7 +23,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MissingRequestHeaderException.class)
     public ResponseEntity<?> handleNoteException(MissingRequestHeaderException exp) {
-        return new ResponseEntity<>(new ApiResponse().message(exp.getLocalizedMessage()).status(Boolean.FALSE),
+        return new ResponseEntity<>(new ApiResponse().message(exp.getLocalizedMessage()).success(Boolean.FALSE),
                 HttpStatus.BAD_REQUEST);
     }
 }

@@ -2,6 +2,7 @@ package com.daily_notes.notes.config;
 
 import com.daily_notes.notes.entity.NoteEntity;
 import com.daily_notes.notes.entity.ShortNoteEntity;
+import com.daily_notes.notes.entity.WorkSpaceEntity;
 import jakarta.annotation.PostConstruct;
 import org.springframework.context.annotation.Configuration;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
@@ -23,8 +24,8 @@ public class DynamoDbTableInitializer {
     public void createAllTables() {
 
         createTable("note", NoteEntity.class);
-
         createTable("short_note", ShortNoteEntity.class);
+        createTable("work-space", WorkSpaceEntity.class);
 
         // add every table here
         // createTable("category", CategoryEntity.class);

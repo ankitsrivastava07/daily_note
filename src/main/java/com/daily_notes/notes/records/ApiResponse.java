@@ -18,7 +18,7 @@ public record ApiResponse(
         return new ApiResponse(message, this.success, this.data, this.error);
     }
 
-    public ApiResponse status(Boolean success) {
+    public ApiResponse success(Boolean success) {
         return new ApiResponse(this.message, success, this.data, this.error);
     }
 

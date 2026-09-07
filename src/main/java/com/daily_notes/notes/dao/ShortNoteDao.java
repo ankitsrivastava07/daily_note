@@ -13,7 +13,6 @@ public interface ShortNoteDao {
     //List<ShortNoteEntity> getAllShortNotes(String categoryId, String userId);
 
     Page<ShortNoteEntity> getAllShortNotes(
-            String categoryId,
             String userId,
             int limit,
             Map<String, AttributeValue> lastEvaluatedKey);

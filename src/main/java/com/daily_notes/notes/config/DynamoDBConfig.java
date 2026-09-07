@@ -1,3 +1,4 @@
+/*
 package com.daily_notes.notes.config;
 
 import com.daily_notes.notes.entity.NoteEntity;
@@ -41,4 +42,4 @@ public class DynamoDBConfig {
                 TableSchema.fromBean(NoteEntity.class)
         );
     }
-}
+}*/
