@@ -35,7 +35,6 @@ public class WorkspaceController {
 
     @GetMapping
     public ResponseEntity<?> getAllWorkspaceByUserId(@PathVariable String userId) {
-
         return new ResponseEntity<>(workSpaceService.getAllWorkspaceByUserId(userId), HttpStatus.OK);
     }
 

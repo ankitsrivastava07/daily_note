@@ -8,7 +8,7 @@ import java.util.Map;
 
 public interface ShortNoteDao {
 
-    ShortNoteEntity createShortNote(ShortNoteEntity shortNoteEntity);
+    void createShortNote(ShortNoteEntity shortNoteEntity);
 
     //List<ShortNoteEntity> getAllShortNotes(String categoryId, String userId);
 

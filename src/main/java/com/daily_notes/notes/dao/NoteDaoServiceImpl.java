@@ -1,31 +1,40 @@
 package com.daily_notes.notes.dao;
 
 import com.daily_notes.notes.entity.NoteEntity;
-import io.awspring.cloud.dynamodb.DynamoDbTemplate;
+import com.daily_notes.notes.util.IdGenerator;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
+import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
 import software.amazon.awssdk.enhanced.dynamodb.Key;
 import software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional;
 import software.amazon.awssdk.enhanced.dynamodb.model.QueryEnhancedRequest;
 
 import java.util.List;
-import java.util.Random;
-import java.util.UUID;
 
 @Repository
 public class NoteDaoServiceImpl implements NoteDaoService {
 
     // private final NoteRepository noteRepository;
-    private DynamoDbTemplate dynamoDbTemplate;
+    private DynamoDbTable<NoteEntity> dynamoDbTable;
 
-    public NoteDaoServiceImpl(DynamoDbTemplate dynamoDBTemplate) {
-        this.dynamoDbTemplate = dynamoDBTemplate;
+    public NoteDaoServiceImpl(DynamoDbEnhancedClient enhancedClient) {
+        this.dynamoDbTable = enhancedClient.table(
+                "note",
+                software.amazon.awssdk.enhanced.dynamodb.TableSchema.fromBean(NoteEntity.class)
+        );
     }
 
     @Override
     public NoteEntity createNote(NoteEntity noteEntity) {
-        noteEntity.setId(UUID.randomUUID().toString());
-        return dynamoDbTemplate.save(noteEntity);
+        noteEntity.setId(IdGenerator.generateId());
+        dynamoDbTable.putItem(noteEntity);
+        Key key = Key
+                .builder()
+                .partitionValue(noteEntity.getUserId())
+                .sortValue(noteEntity.getId())
+                .build();
+        return dynamoDbTable.getItem(key);
     }
 
     @Override
@@ -34,12 +43,12 @@ public class NoteDaoServiceImpl implements NoteDaoService {
                 .partitionValue(userId) // Partition Key
                 .sortValue(noteId)      // Sort Key
                 .build();
-        dynamoDbTemplate.delete(key, NoteEntity.class);
+        dynamoDbTable.deleteItem(key);
     }
 
     @Override
     public NoteEntity updateNote(NoteEntity noteEntity) {
-        return dynamoDbTemplate.save(noteEntity);
+        return dynamoDbTable.updateItem(noteEntity);
     }
 
     @Override
@@ -56,8 +65,8 @@ public class NoteDaoServiceImpl implements NoteDaoService {
                         .queryConditional(queryConditional)
                         .build();
 
-        return dynamoDbTemplate
-                .query(request, NoteEntity.class)
+        return dynamoDbTable
+                .query(request)
                 .items()
                 .stream()
                 .toList();
@@ -71,9 +80,6 @@ public class NoteDaoServiceImpl implements NoteDaoService {
                 .sortValue(noteId)
                 .build();
 
-        return dynamoDbTemplate.load(
-                key,
-                NoteEntity.class
-        );
+        return dynamoDbTable.getItem(key);
     }
 }

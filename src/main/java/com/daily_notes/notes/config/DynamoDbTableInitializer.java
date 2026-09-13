@@ -1,8 +1,6 @@
 package com.daily_notes.notes.config;
 
-import com.daily_notes.notes.entity.NoteEntity;
-import com.daily_notes.notes.entity.ShortNoteEntity;
-import com.daily_notes.notes.entity.WorkSpaceEntity;
+import com.daily_notes.notes.entity.*;
 import jakarta.annotation.PostConstruct;
 import org.springframework.context.annotation.Configuration;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
@@ -26,6 +24,9 @@ public class DynamoDbTableInitializer {
         createTable("note", NoteEntity.class);
         createTable("short_note", ShortNoteEntity.class);
         createTable("work-space", WorkSpaceEntity.class);
+        createTable("workspace-node", WorkspaceNodeEntity.class);
+        createTable("task", TaskEntity.class);
+        createTable("today_task", TodayTaskEntity.class);
 
         // add every table here
         // createTable("category", CategoryEntity.class);

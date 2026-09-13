@@ -1,6 +1,6 @@
 package com.daily_notes.notes.mapper;
 
-import tools.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class CustomMapper {
     private final static ObjectMapper mapper = new ObjectMapper();

@@ -1,5 +1,6 @@
 package com.daily_notes.notes.exceptions;
 
+import com.daily_notes.notes.dto.ErrorResponse;
 import com.daily_notes.notes.records.ApiResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +13,6 @@ import com.daily_notes.notes.exceptions.exception.NoteNotFoundException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-
     private final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(NoteNotFoundException.class)
@@ -26,4 +26,14 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(new ApiResponse().message(exp.getLocalizedMessage()).success(Boolean.FALSE),
                 HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<?> handleInternalServerException(Exception exp) {
+        logger.error("Unexpected error occurred", exp);
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                exp.getLocalizedMessage(),
+                HttpStatus.INTERNAL_SERVER_ERROR.name());
+        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
 }

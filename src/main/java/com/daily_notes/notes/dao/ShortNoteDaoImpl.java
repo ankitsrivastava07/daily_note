@@ -1,6 +1,7 @@
 package com.daily_notes.notes.dao;
 
 import com.daily_notes.notes.entity.ShortNoteEntity;
+import com.daily_notes.notes.util.IdGenerator;
 import org.springframework.stereotype.Repository;
 import software.amazon.awssdk.enhanced.dynamodb.*;
 import software.amazon.awssdk.enhanced.dynamodb.model.Page;
@@ -23,9 +24,9 @@ public class ShortNoteDaoImpl implements ShortNoteDao {
     }
 
     @Override
-    public ShortNoteEntity createShortNote(ShortNoteEntity shortNoteEntity) {
+    public void createShortNote(ShortNoteEntity shortNoteEntity) {
+        shortNoteEntity.setId(IdGenerator.generateId());
         table.putItem(shortNoteEntity);
-        return shortNoteEntity;
     }
 
     @Override
